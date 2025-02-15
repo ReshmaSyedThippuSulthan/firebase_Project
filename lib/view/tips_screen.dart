@@ -121,9 +121,7 @@ class _TipScreenState extends State<TipScreen> {
                               itemBuilder: (context, index) {
                                 return InkWell(
                                   onTap: () {
-                                    if(tips[index]["select"]){
-                                      
-                                    }
+                                    if (tips[index]["select"]) {}
                                     tips = [
                                       {"Tips": "₹20", "select": false},
                                       {"Tips": "₹30", "select": false},

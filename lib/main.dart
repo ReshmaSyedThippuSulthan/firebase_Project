@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:new_task/controller/product_controller.dart';
 import 'package:new_task/firebase_options.dart';
 import 'package:new_task/service/auth_service.dart';
 import 'package:new_task/view/login_page.dart';
@@ -28,6 +29,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (context) => AuthService(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProductController(),
         )
       ],
       child: const MaterialApp(

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:new_task/service/auth_service.dart';
 import 'package:new_task/utils/app_string.dart';
 import 'package:new_task/utils/custom_snack_bar.dart';
+import 'package:new_task/view/gridview_screen.dart';
 import 'package:new_task/view/home_screen.dart';
 import 'package:new_task/view/register_page.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -20,6 +22,8 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isHidden = true;
   bool isLoading = false;
   bool islogin = false;
+  String userName = "";
+  String pass = "";
 
   void _togglePasswordView() {
     setState(() {
@@ -28,10 +32,48 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    autoLogin();
+  }
+
+  @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
+  }
+
+//get data
+  autoLogin() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    final String? name = pref.getString("name");
+    final String? password = pref.getString("pwd");
+    if (name != null && password != null) {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => const GridScreen(),
+      ));
+      setState(() {
+        isLoading = true;
+        userName = name;
+        pass = password;
+      });
+    }
+  }
+
+  //set Login
+  loginData() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString("name", emailController.text);
+    pref.setString("pwd", passwordController.text);
+  }
+
+  //delete data
+  deleteData() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.remove("name");
+    pref.remove("pwd");
   }
 
   @override
@@ -156,6 +198,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           password: passwordController.text)
                                       .then((value) {
                                     if (value == "Success") {
+                                      loginData();
                                       CustomSnackBar.sucessSnackBar(
                                           context: context,
                                           message: AppString.loginSuccess);
@@ -163,7 +206,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              const HomeScreen(),
+                                              const GridScreen(),
                                         ),
                                       );
                                     } else {

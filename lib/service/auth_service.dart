@@ -25,7 +25,7 @@ class AuthService extends ChangeNotifier {
       );
 
       // Store additional user information in Firestore
-      await _firestore.collection('users').doc(userCredential. user?.uid).set({
+      await _firestore.collection('users').doc(userCredential.user?.uid).set({
         'username': username,
         'email': email,
       });
@@ -81,7 +81,6 @@ class AuthService extends ChangeNotifier {
           await googleUser?.authentication;
 
       final credential = GoogleAuthProvider.credential(
-      
         accessToken: googleAuth?.accessToken,
         idToken: googleAuth?.idToken,
       );
@@ -121,4 +120,3 @@ class AuthService extends ChangeNotifier {
     notifyListeners();
   }
 }
-
